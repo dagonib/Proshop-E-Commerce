@@ -1,6 +1,7 @@
 import { 
     CART_ADD_ITEM, 
     CART_REMOVE_ITEM, 
+    CART_SAVE_PAYMENT_METHOD, 
     CART_SAVE_SHIPPING_ADDRESS
 } from '../constants/cartConstants'
 
@@ -38,6 +39,12 @@ export const cartReducer = (
             return {
                 ...state, //Devuelve el estado inicial
                 shippingAddress: action.payload //shippingAddress toma el valor que devuelve la acción: saveShippingAddress, que toma los datos que pasamos desde el formulario.
+            }
+
+        case CART_SAVE_PAYMENT_METHOD:
+            return {
+                ...state,
+                paymentMethod: action.payload
             }
 
         default:
