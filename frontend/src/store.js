@@ -5,7 +5,9 @@ import {
     productListReducer, 
     productDetailsReducer 
 } from './reducers/productReducers'
-import { cartReducer } from './reducers/cartReducers'
+import { 
+    cartReducer
+} from './reducers/cartReducers'
 import { 
     userDetailsReducer, 
     userLoginReducer, 
@@ -31,8 +33,16 @@ const userInfoFromStorage = localStorage.getItem('userInfo')
     ? JSON.parse(localStorage.getItem('userInfo')) 
     : null
 
+// Obtiene los valores guardaros en el localStorage
+const shippingAddressFromStorage = localStorage.getItem('shippingAddress')
+    ? JSON.parse(localStorage.getItem('shippingAddress'))
+    : []
+
+// Establece los valores iniciales de los diferentes estados.
 const initialState = {
-    cart: { cartItems: cartItemsFromStorage },
+    cart: { cartItems: cartItemsFromStorage,
+            shippingAddress: shippingAddressFromStorage 
+          },
     userLogin: { userInfo: userInfoFromStorage }
 }
 
