@@ -147,7 +147,7 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
             user,
             config,
         )
-
+        console.log(data)
         dispatch({
             type: USER_UPDATE_PROFILE_SUCCESS,
             payload: data

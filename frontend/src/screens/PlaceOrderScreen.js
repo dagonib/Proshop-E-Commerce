@@ -26,13 +26,14 @@ const PlaceOrderScreen = ({ history }) => {
     // Obtener los datos guardados en orderCreate
     const orderCreate = useSelector(state => state.orderCreate)
     const { order, success, error } = orderCreate
-
+    
     useEffect(() => {
         if(success) {
             history.push(`/order/${order._id}`)
         }
         // eslint-disable-next-line
-    }, {history, success})
+    }, [history, success])
+    console.log(cart.shippingAddress)
 
     const placeOrderHandler = () => {
         dispatch(createOrder({
