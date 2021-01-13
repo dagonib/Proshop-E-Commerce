@@ -57,7 +57,7 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
         }
 
         // Post Request to a la tabla orders
-        const { data } = await axios.get(`/api/order/${id}`, config)
+        const { data } = await axios.get(`/api/orders/${id}`, config)
       
         dispatch({
             type: ORDER_DETAILS_SUCCESS,
