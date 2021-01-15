@@ -6,15 +6,25 @@ import Message from '../components/Message'
 import Loader from '../components/Loader'
 import { listUsers } from '../actions/userActions'
 
-const UserListScreen = () => {
+const UserListScreen = ({ history }) => {
     const dispatch = useDispatch()
 
     const userList = useSelector(state => state.userList)
     const { loading, error, users } = userList
 
+    // Información del usuario logueado
+    const userLogin = useSelector(state => state.userLogin)
+    const { userInfo } = userLogin 
+    
     useEffect(() => {
-        dispatch(listUsers())
-    }, [dispatch])
+        // Sin acceso a los no admins.
+        if(userInfo && userInfo.isAdmin) { 
+            dispatch(listUsers())
+        } else {
+            history.push('/login')
+        }
+        
+    }, [dispatch, history])
 
     const deleteHandler = (id) => {
         console.log(id)
