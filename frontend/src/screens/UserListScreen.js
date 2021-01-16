@@ -1,10 +1,10 @@
-import React, {useState, useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Table, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listUsers } from '../actions/userActions'
+import { listUsers, deleteUser } from '../actions/userActions'
 
 const UserListScreen = ({ history }) => {
     const dispatch = useDispatch()
@@ -15,6 +15,10 @@ const UserListScreen = ({ history }) => {
     // Información del usuario logueado
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin 
+
+    // Estado del userDelete (loading, success)
+    const userDelete= useSelector(state => state.userDelete)
+    const { success: successDelete } = userDelete 
     
     useEffect(() => {
         // Sin acceso a los no admins.
@@ -23,11 +27,14 @@ const UserListScreen = ({ history }) => {
         } else {
             history.push('/login')
         }
-        
-    }, [dispatch, history])
+        // A cada cambio de alguna de estas variables el useEffect se ejecuta.
+    }, [dispatch, history, successDelete])
 
     const deleteHandler = (id) => {
-        console.log(id)
+        // Mensaje de confirmación de la elimación de un usuario.
+        if(window.confirm('Are you sure')) {
+            dispatch(deleteUser(id))
+        }
     }
 
     return (
