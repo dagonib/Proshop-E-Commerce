@@ -28,7 +28,7 @@ const UserListScreen = ({ history }) => {
             history.push('/login')
         }
         // A cada cambio de alguna de estas variables el useEffect se ejecuta.
-    }, [dispatch, history, successDelete])
+    }, [dispatch, history, successDelete, userInfo])
 
     const deleteHandler = (id) => {
         // Mensaje de confirmación de la elimación de un usuario.
@@ -70,7 +70,7 @@ const UserListScreen = ({ history }) => {
                                     }
                                     </td>
                                     <td>
-                                        <LinkContainer to={`/user/${user._id}/edit`}>
+                                        <LinkContainer to={`/admin/user/${user._id}/edit`}>
                                             <Button variant='light' className='btn-sm'>
                                                 <i className='fas fa-edit'></i>
                                             </Button>
