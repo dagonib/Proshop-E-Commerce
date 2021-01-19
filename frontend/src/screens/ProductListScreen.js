@@ -4,7 +4,8 @@ import { Table, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listProducts, deleteProduct } from '../actions/productActions'
+import { listProducts, deleteProduct, createProduct } from '../actions/productActions'
+import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
 
 const ProductListScreen = ({ history, match }) => {
     const dispatch = useDispatch()
@@ -22,16 +23,38 @@ const ProductListScreen = ({ history, match }) => {
         error: errorDelete, 
         success: successDelete 
     } = productDelete
+
+    const productCreate = useSelector(state => state.productCreate)
+    const { 
+        loading: loadingCreate, 
+        error: errorCreate, 
+        success: successCreate,
+        product: createdProduct 
+    } = productCreate
     
     useEffect(() => {
+        dispatch({ type: PRODUCT_CREATE_RESET })
+
         // Sin acceso a los no admins.
-        if(userInfo && userInfo.isAdmin) { 
-            dispatch(listProducts())
-        } else {
+        if(!userInfo.isAdmin) { 
             history.push('/login')
         }
+
+        if(successCreate) {
+            history.push(`/admin/product/${createdProduct._id}/edit`)
+        } else {
+            dispatch(listProducts())
+        }
+
         // A cada cambio de alguna de estas variables el useEffect se ejecuta.
-    }, [dispatch, history, successDelete, userInfo])
+    }, [
+        dispatch, 
+        history, 
+        successDelete, 
+        userInfo, 
+        successCreate,
+        createdProduct
+    ])
 
     const deleteHandler = (id) => {
         // Mensaje de confirmación de la elimación de un usuario.
@@ -40,8 +63,8 @@ const ProductListScreen = ({ history, match }) => {
         }
     }
 
-    const createProductHandler = (product) => {
-        // CREATE PRODUCT
+    const createProductHandler = () => {
+        dispatch(createProduct())
     }
 
     return (
@@ -58,6 +81,8 @@ const ProductListScreen = ({ history, match }) => {
             </Row>
             {loadingDelete && <Loader />}
             {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
+            {loadingCreate && <Loader />}
+            {errorCreate && <Message variant='danger'>{errorCreate}</Message>}
             {loading 
                 ? <Loader /> 
                 : error ? <Message variant='danger'>{error}</Message> 
