@@ -4,7 +4,7 @@ import { Table, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listProducts } from '../actions/productActions'
+import { listProducts, deleteProduct } from '../actions/productActions'
 
 const ProductListScreen = ({ history, match }) => {
     const dispatch = useDispatch()
@@ -16,7 +16,12 @@ const ProductListScreen = ({ history, match }) => {
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin 
 
-   
+    const productDelete = useSelector(state => state.productDelete)
+    const { 
+        loading: loadingDelete, 
+        error: errorDelete, 
+        success: successDelete 
+    } = productDelete
     
     useEffect(() => {
         // Sin acceso a los no admins.
@@ -26,12 +31,12 @@ const ProductListScreen = ({ history, match }) => {
             history.push('/login')
         }
         // A cada cambio de alguna de estas variables el useEffect se ejecuta.
-    }, [dispatch, history, userInfo])
+    }, [dispatch, history, successDelete, userInfo])
 
     const deleteHandler = (id) => {
         // Mensaje de confirmación de la elimación de un usuario.
         if(window.confirm('Are you sure')) {
-            // DELETE PRODUCTS
+            dispatch(deleteProduct(id))
         }
     }
 
@@ -51,6 +56,8 @@ const ProductListScreen = ({ history, match }) => {
                     </Button>
                 </Col>
             </Row>
+            {loadingDelete && <Loader />}
+            {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
             {loading 
                 ? <Loader /> 
                 : error ? <Message variant='danger'>{error}</Message> 
